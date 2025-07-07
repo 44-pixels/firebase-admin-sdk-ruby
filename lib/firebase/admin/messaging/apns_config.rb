@@ -18,6 +18,10 @@ module Firebase
         #   Options for features provided by the FCM SDK for iOS.
         attr_accessor :fcm_options
 
+        # @return [String, nil]
+        #   Live activity token to apply the updates to.
+        attr_accessor :live_activity_token
+
         # Initializes an {APNSConfig}.
         #
         # @param [Hash{Symbol,String => String}, nil] headers
@@ -27,10 +31,13 @@ module Firebase
         #   An APNs payload to be included in the message (optional).
         # @param [APNSFCMOptions, nil] fcm_options
         #   Options for features provided by the FCM SDK for iOS (optional).
-        def initialize(headers: nil, payload: nil, fcm_options: nil)
+        # @param [String, nil] live_activity_token
+        #   Live activity token to apply the updates to.
+        def initialize(headers: nil, payload: nil, fcm_options: nil, live_activity_token: nil)
           self.headers = headers
           self.payload = payload
           self.fcm_options = fcm_options
+          self.live_activity_token = live_activity_token
         end
       end
     end

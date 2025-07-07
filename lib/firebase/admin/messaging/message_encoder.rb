@@ -192,7 +192,8 @@ module Firebase
           result = {
             headers: check_string_hash("APNSConfig.headers", apns.headers),
             payload: encode_apns_payload(apns.payload),
-            fcmOptions: encode_apns_fcm_options(apns.fcm_options)
+            fcmOptions: encode_apns_fcm_options(apns.fcm_options),
+            live_activity_token: apns.live_activity_token
           }
           remove_nil_values(result)
         end

@@ -26,6 +26,26 @@ describe Firebase::Admin::Auth::Client do
     end
   end
 
+  describe "#update_user" do
+    context "with a phone number" do
+      let(:uid) { 'w3REIV6S4oMgPv2l0Hcq83ax6PJ2' }
+
+      before do
+        stub_auth_request(:post, "/accounts:update")
+          .to_return({body: fixture("auth/update_user.json"), headers: {content_type: "application/json; charset=utf-8"}})
+        stub_auth_request(:post, "/accounts:lookup")
+          .to_return({body: fixture("auth/get_user.json"), headers: {content_type: "application/json; charset=utf-8"}})
+      end
+
+      it "updates user" do
+        user = @app.auth.update_user(uid, phone_number: "+15005550100")
+        expect(user).to be_a(Firebase::Admin::Auth::UserRecord)
+        expect(user.phone_number).to eq("+15005550100")
+        expect(user.uid).to eq(uid)
+      end
+    end
+  end
+
   describe "#create_session_cookie" do
     before do
       stub_auth_request(:post, "/createSessionCookie")

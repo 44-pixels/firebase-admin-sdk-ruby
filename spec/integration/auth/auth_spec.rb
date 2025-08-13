@@ -37,6 +37,32 @@ describe "Firebase::Admin::Auth::Client" do
     end
   end
 
+  describe "#update_user" do
+    it "should return a UserRecord" do
+      with_emulator do
+        user = app.auth.update_user(
+          "1234567890",
+          display_name: "test",
+          email: "test@example.com",
+          email_verified: true,
+          phone_number: "+15105551234",
+          photo_url: "https://example.com/photo/test",
+          password: "123456",
+          disabled: true
+        )
+        expect(user).to_not be_nil
+        expect(user).to be_a(Firebase::Admin::Auth::UserRecord)
+        expect(user.uid).to eq("1234567890")
+        expect(user.display_name).to eq("test")
+        expect(user.email).to eq("test@example.com")
+        expect(user.email_verified?).to be_truthy
+        expect(user.phone_number).to eq("+15105551234")
+        expect(user.photo_url).to eq("https://example.com/photo/test")
+        expect(user.disabled?).to be_truthy
+      end
+    end
+  end
+
   describe "#get_user_by_email" do
     context "when the email exists" do
       it "should return a UserRecord" do

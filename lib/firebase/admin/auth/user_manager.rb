@@ -87,6 +87,37 @@ module Firebase
           @client.post("projects/#{@project_id}:createSessionCookie", payload).body
         end
 
+        # Updates an existing user account with the specified properties.
+        #
+        # @param [String] uid The id of the user.
+        # @param [String, nil] display_name The user’s display name.
+        # @param [String, nil] email The user’s primary email.
+        # @param [Boolean, nil] email_verified A boolean indicating whether or not the user’s primary email is verified.
+        # @param [String, nil] phone_number The user’s primary phone number.
+        # @param [String, nil] photo_url The user’s photo URL.
+        # @param [String, nil] password The user’s raw, unhashed password.
+        # @param [Boolean, nil] disabled A boolean indicating whether or not the user account is disabled.
+        #
+        # @raise [UpdateUserError] if a user cannot be updated.
+        #
+        # @return [UserRecord]
+        def update_user(uid, display_name: nil, email: nil, email_verified: nil, phone_number: nil, photo_url: nil, password: nil, disabled: nil)
+          payload = {
+            localId: validate_uid(uid, required: true),
+            displayName: validate_display_name(display_name),
+            email: validate_email(email),
+            phoneNumber: validate_phone_number(phone_number),
+            photoUrl: validate_photo_url(photo_url),
+            password: validate_password(password),
+            emailVerified: to_boolean(email_verified),
+            disabled: to_boolean(disabled)
+          }.compact
+          res = @client.post(with_path("accounts:update"), payload).body
+          uid = res&.fetch("localId")
+          raise UpdateUserError, "failed to update user #{res}" if uid.nil?
+          get_user_by(uid: uid)
+        end
+
         private
 
         def with_path(path)

@@ -52,6 +52,33 @@ module Firebase
           )
         end
 
+        # Updates an existing user account with the specified properties.
+        #
+        # @param [String, nil] uid he id of the user.
+        # @param [String, nil] display_name The user’s display name.
+        # @param [String, nil] email The user’s primary email.
+        # @param [Boolean, nil] email_verified A boolean indicating whether or not the user’s primary email is verified.
+        # @param [String, nil] phone_number The user’s primary phone number.
+        # @param [String, nil] photo_url The user’s photo URL.
+        # @param [String, nil] password The user’s raw, unhashed password.
+        # @param [Boolean, nil] disabled A boolean indicating whether or not the user account is disabled.
+        #
+        # @raise [UpdateUserError] if a user cannot be updated.
+        #
+        # @return [UserRecord]
+        def update_user(uid, display_name: nil, email: nil, email_verified: nil, phone_number: nil, photo_url: nil, password: nil, disabled: nil)
+          @user_manager.update_user(
+            uid,
+            display_name: display_name,
+            email: email,
+            email_verified: email_verified,
+            phone_number: phone_number,
+            photo_url: photo_url,
+            password: password,
+            disabled: disabled
+          )
+        end
+
         # Gets the user corresponding to the specified user id.
         #
         # @param [String] uid
